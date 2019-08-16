@@ -1,72 +1,60 @@
 <template>
-  <div class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        my-first-nuxtapp
-      </h1>
-      <h2 class="subtitle">
-        My laudable Nuxt.js project
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
-    </div>
+  <div>
+    <table>
+      <caption>好きなものリスト</caption>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名前</th>
+          <th>好きなもの</th>
+        </tr>
+      </thead>
+      <tbody v-for="user in users" :key="user.id">
+        <tr>
+          <td>{{ user.id }}</td>
+          <td>{{ user.name }}</td>
+          <td>
+            <ul>
+              <li v-for="(item, i) in user.like" :key="i">{{ item }}</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-
+import axios from "axios";
 export default {
-  components: {
-    Logo
+  async asyncData() {
+    const { data } = await axios.get("https://api.myjson.com/bins/yzzof");
+    return {
+      users: data
+    };
   }
-}
+};
 </script>
 
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+<style scoped>
+table {
+  width: 100%;
 }
 
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
+tbody:nth-child(odd) {
+  background: #eee;
 }
 
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
+ul {
+  padding: 0;
+  margin: 5px 0;
 }
 
-.links {
-  padding-top: 15px;
+li {
+  display: inline;
+  margin: 0 5px;
+  padding: 5px;
+  background-color: #ccc;
+  border-radius: 20px;
 }
 </style>
